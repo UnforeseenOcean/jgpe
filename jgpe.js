@@ -100,8 +100,8 @@
 
     function JgpeImage(image, data) {
       this.$image = image;
-      this.data = data.splice(0);
-      this.originalData = data.splice(0);
+      this.data = data.slice(0);
+      this.originalData = data.slice(0);
       this.originalSource = this.$image.attr('src');
     };
 
@@ -121,7 +121,7 @@
 
     //TODO: this.data is empty when the image gets set
     JgpeImage.prototype.reset = function () {
-      this.data = this.originalData.splice(0);
+      this.data = this.originalData.slice(0);
       this.setImage(this.data);
     };
 

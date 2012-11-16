@@ -5,6 +5,12 @@
     <script type="text/javascript" src="jgpe.js"></script>
   </head>
   <body>
+    <header>
+      <h1>jgpe<h1>
+    </header>
+
+    <p>Click the image to corrupt it. Click <a id="reset" href="javascript:void(0)">here</a> to reset.</p>
+
     <img id="image" src="photo.jpeg"/>
 
     <script type="text/javascript">
@@ -15,6 +21,15 @@
         image = jgpe.corrupt.loadImage(selector, function(jgpeImage) {
           $(selector).on("click", function() {
             jgpeImage.corrupt();
+          });
+        });
+
+        $("#reset").on("click", function() {
+          $("img").each(function() {
+            var data = $(this).data("jgpe");
+            if (data) {
+              data.reset();
+            }
           });
         });
       });
