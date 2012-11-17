@@ -1,0 +1,21 @@
+h1, p {
+  font-family: arial, sans-serif;
+}
+
+h1 {
+  color: #222;
+}
+
+p {
+  color: #444;
+}
+
+a {
+  color: #F30;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #222;
+  text-decoration: underline;
+}
