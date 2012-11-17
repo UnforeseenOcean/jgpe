@@ -14,16 +14,33 @@
 
     <img id="image" src="photo.jpeg"/>
 
+    <div id="droptarget">
+
+    </div>
+
     <script type="text/javascript">
       $(function() {
         var selector, image;
         selector = "#image";
         //callback function is passed the corruptable image object, which is also stored in the image's data object
-        image = jgpe.corrupt.loadImage(selector, function(jgpeImage) {
+        image = jgpe.corrupt.loadImageAjax(selector, function(jgpeImage) {
           $(selector).on("click", function() {
             jgpeImage.corrupt();
           });
         });
+
+        var dropbox;
+
+        //https://developer.mozilla.org/en-US/docs/Using_files_from_web_applications
+        dropbox = document.getElementById("droptarget");
+        dropbox.addEventListener("dragenter", dragenter, false);
+        dropbox.addEventListener("dragover", dragover, false);
+        dropbox.addEventListener("drop", function (e) {
+          drop(e, selector);
+        }, false);
+
+
+
 
         $("#reset").on("click", function() {
           $("img").each(function() {
@@ -34,6 +51,26 @@
           });
         });
       });
+
+      function dragenter(e) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+
+      function dragover(e) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+
+      function drop(e, selector) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        var dt = e.dataTransfer;
+        var files = dt.files;
+
+        jgpe.corrupt.LoadImageFileReader(files[0], selector);
+      }
     </script>
 
   </body>

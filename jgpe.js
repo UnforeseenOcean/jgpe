@@ -16,17 +16,39 @@
       this.myVariable = "foobar";
     },
 
-    loadImage: function(selector, callback) {
+    LoadImageFileReader: function (file, selector) {
+      var imageType = /image.*/, img, reader, ui8a, $image, image;
+
+      if (!file.type.match(imageType)) {
+        return false;
+      }
+
+      $image = $(selector);
+      img = $image[0];
+      img.file = file;
+
+      reader = new FileReader();
+      reader.onload = function(e) {
+        //img.src = e.target.result
+        ui8a = new Uint8Array(e.target.result);
+        image = new jgpe.JgpeImage($image, ui8a);
+        console.log(image);
+
+      };
+      reader.readAsArrayBuffer(file);
+    },
+
+    loadImageAjax: function (selector, callback) {
       var image,
           $image = $(selector),
           source = $image.attr("src");
 
       $.ajax({
         url: source,
-        beforeSend: function ( xhr ) {
+        beforeSend: function (xhr) {
           xhr.overrideMimeType("text/plain; charset=x-user-defined");
         },
-        success: function(textResponse, whatever, jqXHR) {
+        success: function (textResponse, whatever, jqXHR) {
           var data = [], i;
           for (i = 0; i < textResponse.length -1; i++) {
             data.push(textResponse.charCodeAt(i) & 0xFF); //converting to 0-255
@@ -112,17 +134,18 @@
 
     function JgpeImage(image, data) {
       this.$image = image;
-      this.data = data.slice(0);
-      this.originalData = data.slice(0);
-      this.originalSource = this.$image.attr('src');
+      this.data = new Uint8Array(data);
+      this.originalData = new Uint8Array(data);
+      // this.data = data.slice(0);
+      // this.originalData = data.slice(0);
     };
 
     var $image;
-    var originalSource;
     var originalData;
     var data;
 
     JgpeImage.prototype.setImage = function () {
+      console.log("setimage called");
       this.$image.attr("src", "data:image/jpeg;base64," + jgpe.corrupt.encode(this.data));
     };
 
@@ -133,7 +156,8 @@
 
     //TODO: this.data is empty when the image gets set
     JgpeImage.prototype.reset = function () {
-      this.data = this.originalData.slice(0);
+      // this.data = this.originalData.slice(0);
+      this.data = new Uint8Array(this.originalData);
       this.setImage(this.data);
     };
 
