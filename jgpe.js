@@ -65,7 +65,19 @@
     //   , speed);
     // },
 
-    shuffle: function (data) {
+    randomiseByte: function (data) {
+      var start, end, index, newvalue;
+      start = 5;
+      end = data.length - 10;
+      index = jgpe.corrupt.getRandom(start, end);
+      newvalue = jgpe.corrupt.getRandom(0, 255);
+
+      data[index] = newvalue;
+
+      return data;
+    },
+
+    shuffleBytes: function (data) {
       var start, end, length, index1, index2, temp;
       start = 5;
       end = data.length - 10;
@@ -115,7 +127,7 @@
     };
 
     JgpeImage.prototype.corrupt = function () {
-      this.data = jgpe.corrupt.shuffle(this.data);
+      this.data = jgpe.corrupt.randomiseByte(this.data);
       this.setImage(this.data);
     };
 
