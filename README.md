@@ -3,6 +3,7 @@
 fairly trivial javascript jpeg corrupter
 
 Brought to you by William O'Neil - http://heywill.com
+
 http://github.com/wjoneil/jgpe
 
 Requires jQuery.
