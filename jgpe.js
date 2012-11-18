@@ -12,10 +12,6 @@
       // your initialization code here
     },
 
-    anotherMethod: function () {
-      this.myVariable = "foobar";
-    },
-
     LoadImageFileReader: function (file, selector) {
       var imageType = /image.*/, img, reader, ui8a, $image, image;
 
@@ -31,8 +27,8 @@
       reader.onload = function(e) {
         //img.src = e.target.result
         ui8a = new Uint8Array(e.target.result);
-        image = new jgpe.JgpeImage($image, ui8a);
-        console.log(image);
+        image = new jgpe.JgpeImage($image, ui8a, file.type);
+        $image.data("jgpe", image);
 
       };
       reader.readAsArrayBuffer(file);
@@ -68,49 +64,36 @@
       });
     },
 
-    // corruptImage: function (data) {
-    //   data = shuffle(data);
-    //   $("#image").attr("src", "data:image/jpeg;base64," + encode(data));
-    //   return data;
-    // },
-
-    // repeat: function (data, repeats, speed) {
-    //   speed = speed || 200;
-    //   setTimeout(function() {
-
-    //     data = corruptImage(data);
-
-    //     if (repeats > 0) {
-    //       repeat(data, repeats-1);
-    //     }
-    //   }
-    //   , speed);
-    // },
-
-    randomiseByte: function (data) {
-      var start, end, index, newvalue;
+    randomiseByteValues: function (data, repeats) {
+      var start, end, index, newvalue, i;
       start = 5;
       end = data.length - 10;
-      index = jgpe.corrupt.getRandom(start, end);
-      newvalue = jgpe.corrupt.getRandom(0, 255);
+      repeats = repeats || 1;
 
-      data[index] = newvalue;
+      for (i = 0; i < repeats; i++) {
+        index = jgpe.corrupt.getRandom(start, end);
+        newvalue = jgpe.corrupt.getRandom(0, 255);
+        data[index] = newvalue;
+      }
 
       return data;
     },
 
-    shuffleBytes: function (data) {
-      var start, end, length, index1, index2, temp;
+    swapBytePositions: function (data, repeats) {
+      var start, end, length, index1, index2, temp, i;
       start = 5;
       end = data.length - 10;
-      index1 = jgpe.corrupt.getRandom(start, end);
-      index2 = jgpe.corrupt.getRandom(start, end);
+      repeats = repeats || 1;
 
-      //single array entry swapping
-      temp = data[index1];
-      data[index1] = data[index2];
-      data[index2] = temp;
+      for (i = 0; i < repeats; i++) {
+        index1 = jgpe.corrupt.getRandom(start, end);
+        index2 = jgpe.corrupt.getRandom(start, end);
 
+        //single array entry swapping
+        temp = data[index1];
+        data[index1] = data[index2];
+        data[index2] = temp;
+      }
       return data;
     },
 
@@ -132,25 +115,34 @@
   window.jgpe.JgpeImage = (function ($) {
     "use strict";
 
-    function JgpeImage(image, data) {
-      this.$image = image;
-      this.data = new Uint8Array(data);
-      this.originalData = new Uint8Array(data);
-      // this.data = data.slice(0);
-      // this.originalData = data.slice(0);
-    };
-
     var $image;
     var originalData;
     var data;
 
-    JgpeImage.prototype.setImage = function () {
-      console.log("setimage called");
-      this.$image.attr("src", "data:image/jpeg;base64," + jgpe.corrupt.encode(this.data));
+    var corruptionScheme;
+
+    function JgpeImage(image, data, type) {
+      this.corruptionScheme = jgpe.corrupt.randomiseByteValues;
+
+      //set up image data
+      this.$image = image;
+      this.data = new Uint8Array(data);
+      this.originalData = new Uint8Array(data);
+      this.type = type || "image/jpeg"
+
+      this.setImage();
     };
 
-    JgpeImage.prototype.corrupt = function () {
-      this.data = jgpe.corrupt.randomiseByte(this.data);
+    JgpeImage.prototype.setScheme = function (scheme) {
+      this.corruptionScheme = scheme;
+    }
+
+    JgpeImage.prototype.setImage = function () {
+      this.$image.attr("src", "data:"+this.type+";base64," + jgpe.corrupt.encode(this.data));
+    };
+
+    JgpeImage.prototype.corrupt = function (repeats) {
+      this.data = this.corruptionScheme(this.data, repeats);
       this.setImage(this.data);
     };
 

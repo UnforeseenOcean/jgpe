@@ -10,12 +10,10 @@
       <h1>jgpe<h1>
     </header>
 
-    <p>Click the image to corrupt it. Click <a id="reset" href="javascript:void(0)">here</a> to reset.</p>
-
-    <img id="image" src="photo.jpeg"/>
+    <p>Click the image to corrupt it. Drag a new image onto the current one to replace it. Click <a id="reset" href="javascript:void(0)">here</a> to reset.</p>
 
     <div id="droptarget">
-
+      <img id="image" src="photo.jpeg"/>
     </div>
 
     <script type="text/javascript">
@@ -23,10 +21,10 @@
         var selector, image;
         selector = "#image";
         //callback function is passed the corruptable image object, which is also stored in the image's data object
-        image = jgpe.corrupt.loadImageAjax(selector, function(jgpeImage) {
-          $(selector).on("click", function() {
-            jgpeImage.corrupt();
-          });
+        image = jgpe.corrupt.loadImageAjax(selector);
+
+        $(selector).on("click", function() {
+          $(this).data('jgpe').corrupt();
         });
 
         var dropbox;
@@ -38,9 +36,6 @@
         dropbox.addEventListener("drop", function (e) {
           drop(e, selector);
         }, false);
-
-
-
 
         $("#reset").on("click", function() {
           $("img").each(function() {
