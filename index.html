@@ -12,30 +12,21 @@
 
     <p>Click the image to corrupt it. Drag a new image onto the current one to replace it. Click <a id="reset" href="javascript:void(0)">here</a> to reset.</p>
 
-    <div id="droptarget">
-      <img id="image" src="photo.jpeg"/>
-    </div>
+    <img id="image" src="photo.jpeg"/>
 
     <script type="text/javascript">
       $(function() {
-        var selector, image;
+        var selector;
         selector = "#image";
-        //callback function is passed the corruptable image object, which is also stored in the image's data object
-        image = jgpe.corrupt.loadImageAjax(selector);
+        //the image's selector loads the JpgeImage into the data property so we can write over it on drag/drop
+        jgpe.corrupt.loadImageAjax(selector);
 
         $(selector).on("click", function() {
-          $(this).data('jgpe').corrupt();
+          var data = $(this).data("jgpe");
+          if (data) {
+            data.corrupt();
+          }
         });
-
-        var dropbox;
-
-        //https://developer.mozilla.org/en-US/docs/Using_files_from_web_applications
-        dropbox = document.getElementById("droptarget");
-        dropbox.addEventListener("dragenter", dragenter, false);
-        dropbox.addEventListener("dragover", dragover, false);
-        dropbox.addEventListener("drop", function (e) {
-          drop(e, selector);
-        }, false);
 
         $("#reset").on("click", function() {
           $("img").each(function() {
@@ -45,6 +36,18 @@
             }
           });
         });
+
+
+
+        //https://developer.mozilla.org/en-US/docs/Using_files_from_web_applications
+        var dropbox;
+        dropbox = document.getElementById("image");
+        dropbox.addEventListener("dragenter", dragenter, false);
+        dropbox.addEventListener("dragover", dragover, false);
+        dropbox.addEventListener("drop", function (e) {
+          drop(e, selector);
+        }, false);
+
       });
 
       function dragenter(e) {
@@ -66,6 +69,7 @@
 
         jgpe.corrupt.LoadImageFileReader(files[0], selector);
       }
+
     </script>
 
   </body>
