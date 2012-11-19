@@ -6,13 +6,33 @@
     <link href="css/styles.css" type="text/css" media="all" rel="stylesheet">
   </head>
   <body>
-    <header>
-      <h1>jgpe<h1>
-    </header>
+    <div id="container">
 
-    <p>Click the image to corrupt it. Drag a new image onto the current one to replace it. Click <a id="reset" href="javascript:void(0)">here</a> to reset.</p>
+      <div id="content-container">
 
-    <img id="image" src="images/kitten.jpg"/>
+        <header>
+          <h1>
+            <span>jgpe</span>
+          </h1>
+        </header>
+
+        <p>Click the image to corrupt it. Click <a id="reset" href="javascript:void(0)">here</a> to reset.</p>
+        <p>Drag a new image onto the current one to replace it. </p>
+
+        <div id="image-container">
+          <img id="image" src="images/kitten.jpg"/>
+        </div>
+
+      </div>
+
+      <footer>
+        <p>
+          &hearts; <a href="http://heywill.com">heywill.com</a>
+        </p>
+      </footer>
+
+    </div>
+
 
     <script type="text/javascript">
       $(function() {
@@ -35,6 +55,11 @@
               data.reset();
             }
           });
+        });
+
+        $("h1 span").on("click", function() {
+          var title, $this = $(this);
+          $this.html(shuffleArray($this.html().split("")).join(""));
         });
 
 
@@ -67,8 +92,22 @@
         var dt = e.dataTransfer;
         var files = dt.files;
 
-        jgpe.corrupt.LoadImageFileReader(files[0], selector);
+        jgpe.corrupt.LoadImageFileReader(files[0], selector, function(image) {
+          // hack to force container width to redraw
+          $("#content-container").width($("#image").width());
+        });
       }
+
+
+      function shuffleArray(array) {
+        for (var i = array.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+        return array;
+    }
 
     </script>
 

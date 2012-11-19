@@ -12,7 +12,7 @@
       // your initialization code here
     },
 
-    LoadImageFileReader: function (file, selector) {
+    LoadImageFileReader: function (file, selector, callback) {
       var imageType = /image.*/, img, reader, ui8a, $image, image;
 
       if (!file.type.match(imageType)) {
@@ -29,6 +29,12 @@
         ui8a = new Uint8Array(e.target.result);
         image = new jgpe.JgpeImage($image, ui8a, file.type);
         $image.data("jgpe", image);
+
+        if (callback) {
+          return callback(image);
+        } else {
+          return image;
+        }
 
       };
       reader.readAsArrayBuffer(file);
@@ -131,6 +137,14 @@
       this.type = type || "image/jpeg"
 
       this.setImage();
+    };
+
+    JgpeImage.prototype.height = function () {
+      return this.$image.height();
+    };
+
+    JgpeImage.prototype.width = function () {
+      return this.$image.width();
     };
 
     JgpeImage.prototype.setScheme = function (scheme) {

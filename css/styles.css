@@ -1,3 +1,7 @@
+body {
+  background-color: #444;
+}
+
 h1, p {
   font-family: arial, sans-serif;
 }
@@ -6,16 +10,51 @@ h1 {
   color: #222;
 }
 
+h1 span {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  cursor: pointer;
+}
+
 p {
   color: #444;
 }
 
 a {
-  color: #F30;
+  color: #AAA;
   text-decoration: none;
 }
 
 a:hover {
   color: #222;
-  text-decoration: underline;
+}
+
+#content-container {
+  background-color: #fff;
+
+  padding: 10px 20px;
+  border-radius: 5px;
+
+  margin: 0 auto;
+  width: 640px;
+}
+
+#image-container {
+  margin-top: 50px;
+  text-align: center;
+}
+
+footer {
+  margin: 0 auto;
+  width: 640px;
+}
+
+footer p {
+  text-align: center;
+  color: #fff;
 }
