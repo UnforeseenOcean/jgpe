@@ -1,5 +1,5 @@
 body {
-  background-color: #444;
+  background-color: #EEE;
 }
 
 h1, p {
@@ -7,7 +7,7 @@ h1, p {
 }
 
 h1 {
-  color: #222;
+  color: #444;
 }
 
 h1 span {
@@ -22,11 +22,11 @@ h1 span {
 }
 
 p {
-  color: #444;
+  color: #666;
 }
 
 a {
-  color: #AAA;
+  color: #FD5443;
   text-decoration: none;
 }
 
@@ -39,6 +39,7 @@ a:hover {
 
   padding: 10px 20px;
   border-radius: 5px;
+  border:1px solid #aaa;
 
   margin: 0 auto;
   width: 640px;
@@ -56,5 +57,5 @@ footer {
 
 footer p {
   text-align: center;
-  color: #fff;
+  color: #666;
 }
