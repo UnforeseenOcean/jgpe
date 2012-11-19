@@ -3,7 +3,8 @@
   <head>
     <script type="text/javascript" src="lib/jquery-1.8.2.min.js"></script>
     <script type="text/javascript" src="jgpe.js"></script>
-    <link href="css/styles.css" type="text/css" media="all" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/styles.css" media="all">
+    <link rel="icon" type="image/png" href="images/favicon.ico">
   </head>
   <body>
     <div id="container">
@@ -16,20 +17,18 @@
           </h1>
         </header>
 
-        <p>Click the image to corrupt it. Click <a id="reset" href="javascript:void(0)">here</a> to reset.</p>
+        <p>Click the image to corrupt it. It might take a few tries to get visible results.</p>
         <p>Drag a new image onto the current one to replace it. </p>
-
-        <div id="image-container">
-          <img id="image" src="images/kitten.jpg"/>
-        </div>
+        <p class="hearts">
+          &hearts; <a href="http://heywill.com">heywill.com</a>
+        </p>
 
       </div>
 
-      <footer>
-        <p>
-          &hearts; <a href="http://heywill.com">heywill.com</a>
-        </p>
-      </footer>
+      <div id="image-container">
+        <img id="image" src="images/kitten.jpg"/>
+        <p><a id="reset" href="javascript:void(0)">reset</a></p>
+      </div>
 
     </div>
 
@@ -92,10 +91,7 @@
         var dt = e.dataTransfer;
         var files = dt.files;
 
-        jgpe.corrupt.LoadImageFileReader(files[0], selector, function(image) {
-          // hack to force container width to redraw
-          $("#content-container").width($("#image").width());
-        });
+        jgpe.corrupt.LoadImageFileReader(files[0], selector);
       }
 
 
